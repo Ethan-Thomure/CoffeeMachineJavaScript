@@ -10,14 +10,12 @@ const coffeeIngredients = {
 };
 
 function displayContents() {
-    console.log(`
-The coffee machine has:
+    console.log(`\nThe coffee machine has:
 ${supplies.water} ml of water
 ${supplies.milk} ml of milk
 ${supplies["coffee beans"]} g of coffee beans
 ${supplies.cups} disposable cups
-$${money} of money
-`);
+$${money} of money\n`);
 }
 
 function buy() {
@@ -28,19 +26,17 @@ function buy() {
         choice = Number(choice);
     }
     for (let i in supplies) {
-        if (Math.floor(supplies[i] / coffeeIngredients[choice][i]) === 0) {
+        if (supplies[i] < coffeeIngredients[choice][i]) {
             console.log(`Sorry, not enough ${i}!\n`);
             return;
         }
     }
-    console.log("I have enough resources, making you a coffee!");
+    console.log("I have enough resources, making you a coffee!\n");
     supplies.water -= coffeeIngredients[choice].water;
     supplies.milk -= coffeeIngredients[choice].milk;
     supplies["coffee beans"] -= coffeeIngredients[choice]["coffee beans"];
     supplies.cups--;
     money += coffeeIngredients[choice].cost;
-
-    console.log()
 }
 
 function fill() {
@@ -52,8 +48,7 @@ function fill() {
 }
 
 function take() {
-    console.log(`
-I gave you $${money}`);
+    console.log(`\nI gave you $${money}\n`);
     money = 0;
 }
 
