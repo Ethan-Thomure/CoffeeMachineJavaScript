@@ -19,12 +19,14 @@ $${money} of money\n`);
 }
 
 function buy() {
-    let choice = input("\nWhat do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:\n");
-    if (choice === "back") {
-        return;
-    } else {
-        choice = Number(choice);
-    }
+    let choice;
+    do {
+        choice = input("\nWhat do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:\n");
+        if (choice === "back") return;
+        if (!(choice in coffeeIngredients)) console.log("please pick one of three...\n");
+    } while (!(choice in coffeeIngredients));
+    choice = Number(choice);
+
     for (let i in supplies) {
         if (supplies[i] < coffeeIngredients[choice][i]) {
             console.log(`Sorry, not enough ${i}!\n`);
@@ -40,10 +42,20 @@ function buy() {
 }
 
 function fill() {
-    supplies.water += Number(input("\nWrite how many ml of water you want to add:\n"));
-    supplies.milk += Number(input("Write how many ml of milk you want to add:\n"));
-    supplies["coffee beans"] += Number(input("Write how many grams of coffee beans you want to add:\n"));
-    supplies.cups += Number(input("Write how many disposable cups you want to add:\n"));
+    function checkUserInput(message) {
+        let userInput
+        do {
+            userInput = Number(input(`${message}`));
+            if (isNaN(userInput)) console.log("Please write a valid number...");
+        } while (!isNaN(userInput));
+        return userInput
+    }
+    //TODO allow user to pick which supply to replenish
+
+    supplies.water += checkUserInput("\nWrite how many ml of water you want to add:\n");
+    supplies.milk += checkUserInput("Write how many ml of milk you want to add:\n");
+    supplies["coffee beans"] += checkUserInput("Write how many grams of coffee beans you want to add:\n");
+    supplies.cups += checkUserInput("Write how many disposable cups you want to add:\n");
     console.log()
 }
 
@@ -54,7 +66,7 @@ function take() {
 
 let action;
 do {
-    action = input("Write action (buy, fill, take, remaining, exit):\n")
+    action = input("Write action (buy, fill, take, remaining, exit):\n").toLowerCase();
     switch (action) {
         case "buy":
             buy();
@@ -67,5 +79,10 @@ do {
             break;
         case "remaining":
             displayContents();
+            break;
+        case "exit":
+            break;
+        default:
+            console.log("Please pick one of the options...\n");
     }
 } while (action !== "exit");
